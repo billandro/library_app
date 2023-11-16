@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <div class="header">
+        <div class="library"><img src="img/icons8-open-book-40.png">Library</div>
+        <button id="sign-up">Sign Up</button>
+    </div>
+    <div class="content">
+        <div class="add-book">
+            <button id="add">+ Add Book</button>
+        </div>
+        <div id="overlay">
+            <form id="form">
+                <div class="heading"><h1>Add New Book</h1></div>
+                        
+                <div class="form-values">
+                    <input type="text" id="title" placeholder="Title">
+                    <input type="text" id="author" placeholder="Author">
+                    <input type="number" id="pages" placeholder="Pages">
+                </div>
+
+                <div class="status">
+                    <label for="status">Have you read it?</label>
+                    <input type="checkbox" id="status" name="status" value="">
+                </div>
+                    
+                <div class="submit">
+                    <button type="submit" id="submit">SUBMIT</button>
+                </div>
+            </form>
+        </div>
+        <div class="books-to-add"
+        ></div>
+    </div>
+    <div class="footer">Copyright &copy;<a href="#">Bill Qubeka</a></div>
+
+    <script src="js/javascript.js"></script>
+</body>
+</html>
