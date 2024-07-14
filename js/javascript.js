@@ -1,11 +1,8 @@
 const addABook = document.querySelector("#add");
 const submitButton = document.querySelector("#submit");
-const readButton = document.querySelector("#read");
-const removeButton = document.querySelector("#remove");
 const cardBody = document.querySelector(".books-to-add");
 const overLay = document.querySelector("#overlay");
 const form = document.querySelector("form");
-const body = document.body;
 
 let myLibrary = [
     {   title: "The Alchemist", 
@@ -15,7 +12,7 @@ let myLibrary = [
     },
 ];
 
-// class Book constructor 
+// Book class constructor
 class Book {
     constructor(title, author, pages, status) {
         this.title = title;
@@ -25,8 +22,7 @@ class Book {
     }
 }
 
-/* retrieves information from the input fields and
-pushes the book object into the array */
+// Function to retrieve information from the input fields and push the book object into the array
 function takeBookInfo(title, author, pages, status) {
     let book = new Book(title, author, pages, status);
     myLibrary.push(book);
@@ -34,138 +30,156 @@ function takeBookInfo(title, author, pages, status) {
     addBookToPage();
 }
 
-// clear container containing book cards
+// Function to clear container containing book cards
 function clearContainer() {
-    cardBody.innerText = "";
+    cardBody.innerHTML = "";
 }
 
-// loops through the array and adds the book to the page
+// Function to update the button color based on the read status
+function updateReadButtonColor(button) {
+    if (button.innerText === "Read") {
+        button.style.backgroundColor = "var(--greenBG-color)";
+    } else if (button.innerText === "Not Read") {
+        button.style.backgroundColor = "var(--redBG-color)";
+    }
+}
+
+// Function to loop through the array and add the book to the page
 function addBookToPage() {
     clearContainer();
+    
     myLibrary.forEach((book, index) => {
         const card = document.createElement("div");
         card.classList.add("card");
     
         const title = document.createElement("div");
         title.classList.add("title");
+        title.innerText = `"${book.title}"`;
     
         const author = document.createElement("div");
         author.classList.add("author");
-    
+        author.innerText = `${book.author}`;
+
         const pages = document.createElement("div");
         pages.classList.add("pages");
+        pages.innerText = `${book.pages}`;
     
         const readDiv = document.createElement("div");
         readDiv.classList.add("read");
     
-        const readButton = document.createElement("button");
-        readButton.setAttribute("id", "read");
+        let readButton = document.createElement("button");
+        readButton.setAttribute("data-index", index);
+        readButton.classList.add("read-toggle");
+        readButton.innerText = `${book.status}`;
+        updateReadButtonColor(readButton); // Update button color
     
         const removeDiv = document.createElement("div");
         removeDiv.classList.add("remove");
     
-        const removeCard = document.createElement("button");
-        removeCard.setAttribute("id", "remove");
-    
-        title.innerText = `"${book.title}"`;
-        author.innerText = `${book.author}`;
-        pages.innerText = `${book.pages}`;
-        readButton.innerText = `${book.status}`;
+        let removeCard = document.createElement("button");
+        removeCard.setAttribute("data-index", index);
+        removeCard.classList.add("remove-card");
         removeCard.innerText = "Remove";
     
         card.appendChild(title);
         card.appendChild(author);
         card.appendChild(pages);
-    
         readDiv.appendChild(readButton);
         card.appendChild(readDiv);
-    
         removeDiv.appendChild(removeCard);
         card.appendChild(removeDiv);
-    
         cardBody.appendChild(card);
+    });
 
-        // event listener to toggle the read button of cards
-        readButton.addEventListener("click", function() {
-            if (readButton.id === "read") {
-                readButton.id = "not-read";
-                readButton.innerText = "Not read";
-            } else {
-                readButton.id = "read"
-                readButton.innerText = "Read";
-            }
+    // Attach event listeners after the cards have been added to the DOM
+    document.querySelectorAll(".read-toggle").forEach(button => {
+        button.addEventListener("click", function() {
+            const index = this.getAttribute("data-index");
+            myLibrary[index].status = myLibrary[index].status === "Read" ? "Not Read" : "Read"; 
             storeData();
+            addBookToPage();
         });
+    });
 
-        // event listener to remove card at specified index
-        removeCard.addEventListener("click", function() {
+    document.querySelectorAll(".remove-card").forEach(button => {
+        button.addEventListener("click", function() {
+            const index = this.getAttribute("data-index");
             myLibrary.splice(index, 1);
             storeData();
-            retrieveData();
+            addBookToPage();
         });
     });
 }
 
-// function to open the overlay popup
+// Function to open the overlay popup
 function openOverLay() {
-    const overlay = document.getElementById("overlay");
-    overlay.style.display = "flex";
+    overLay.style.display = "flex";
 }
 
-// opens and closes the pop-up form
-addABook.addEventListener("click", function() {
-    const form = document.getElementById("form");
-    if (form.style.display === "none") {
-        form.style.display = "block";
-        openOverLay();
-    } else {
-        form.style.display = "none";
-    }
-});
+// Function to close the form and overlay
+function closeForm() {
+    form.style.display = "none";
+    overLay.style.display = "none";
+}
 
-// The submit button that creates a new card
+// Function to handle form submission
 submitButton.addEventListener("click", function(event) {
     event.preventDefault();
-    const form = document.getElementById("form");
     const title = document.getElementById("title").value;
     const author = document.getElementById("author").value;
     const pages = document.getElementById("pages").value;
     const readStatus = document.querySelector("#status").checked;
-    const overlay = document.getElementById("overlay");
 
-    if (readStatus === true) {
-        takeBookInfo(title, author, pages, "Read");
-        addBookToPage(); 
-        form.style.display = "none";
+    if (title && author && pages) {  // Ensure all fields are filled
+        if (readStatus === true) {
+            takeBookInfo(title, author, pages, "Read");
+        } else {
+            takeBookInfo(title, author, pages, "Not Read");
+        }
+
+        closeForm();
+        // Clear form input fields after form submission
+        form.reset();
     } else {
-        takeBookInfo(title, author, pages, "Not read");
-        addBookToPage();
-        form.style.display = "none";
+        alert("Please fill in all fields.");
     }
-    // close overlay when you submit
-    overlay.style.display = "none";
-
-    // empty form input fields after form submission
-    const allinputs = document.querySelectorAll("input");
-    allinputs.forEach(input => input.value = "");
-
-    storeData();
-    retrieveData();
 });
 
-// local storage for data
+// Function to handle "Add a Book" button click
+addABook.addEventListener("click", function() {
+    if (form.style.display === "none" || form.style.display === "") {
+        form.style.display = "block";
+        openOverLay();
+    } else {
+        closeForm();
+    }
+});
+
+// Function to store data in localStorage
 function storeData() {
     if (localStorage) {
         localStorage.setItem(`myLibrary`, JSON.stringify(myLibrary));
     }
 }
 
-// pulls books from local storage when page is refreshed
+// Function to retrieve data from localStorage
 function retrieveData() {
-    // gets information from local storage
     let storedBooks = localStorage.getItem("myLibrary");
-    storedBooks = JSON.parse(storedBooks);
-    myLibrary = storedBooks;
+    
+    if (storedBooks) {
+        myLibrary = JSON.parse(storedBooks);
+    } else {
+        myLibrary = [];
+    }
+
     addBookToPage();
 }
+
 retrieveData();
+
+// Event listener to close overlay when clicking outside the form
+overLay.addEventListener("click", function(e) {
+    if (e.target.id === "overlay") {
+        closeForm();
+    }
+});

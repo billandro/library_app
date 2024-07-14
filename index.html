@@ -3,42 +3,72 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Library</title>
     <link rel="stylesheet" href="css/styles.css">
+    <style>
+        /* Add any additional styles here */
+        #overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            justify-content: center;
+            align-items: center;
+        }
+        #form {
+            display: none;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+        }
+    </style>
 </head>
 <body>
-    <div class="header">
-        <div class="library"><img src="img/icons8-open-book-40.png">Library</div>
-        <button id="sign-up">Sign Up</button>
-    </div>
-    <div class="content">
-        <div class="add-book">
-            <button id="add">+ Add Book</button>
-        </div>
-        <div id="overlay">
-            <form id="form">
-                <div class="heading"><h1>Add New Book</h1></div>
+    <header>
+        <nav class="menu">
+            <div class="library"><img src="img/icons8-open-book-40.png" alt="Library Icon">Library</div>
+            <ul>
+                <li id="sign-up">Sign Up</li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <section class="content">
+            <div class="add-book">
+                <button id="add">+ Add Book</button>
+            </div>
+            <div id="overlay" class="the_overlay">
+                <form id="form">
+                    <div class="heading"><h1>Add New Book</h1></div>
+                            
+                    <div class="form-values">
+                        <input type="text" id="title" placeholder="Title" required>
+                        <input type="text" id="author" placeholder="Author" required>
+                        <input type="number" id="pages" placeholder="Pages" required>
+                    </div>
+    
+                    <div class="status">
+                        <label for="status">Have you read it?</label>
+                        <input type="checkbox" id="status" name="status">
+                    </div>
                         
-                <div class="form-values">
-                    <input type="text" id="title" placeholder="Title">
-                    <input type="text" id="author" placeholder="Author">
-                    <input type="number" id="pages" placeholder="Pages">
-                </div>
-
-                <div class="status">
-                    <label for="status">Have you read it?</label>
-                    <input type="checkbox" id="status" name="status" value="">
-                </div>
-                    
-                <div class="submit">
-                    <button type="submit" id="submit">SUBMIT</button>
-                </div>
-            </form>
-        </div>
-        <div class="books-to-add"
-        ></div>
-    </div>
-    <div class="footer">Copyright &copy;<a href="#">Bill Qubeka</a></div>
+                    <div class="submit">
+                        <button type="submit" id="submit">SUBMIT</button>
+                    </div>
+                </form>
+            </div>
+            <div class="books-to-add"></div>
+        </section>
+    </main>
+    
+    <footer>
+        <section class="footer">
+            <p>Copyright &copy;<a href="https://github.com/billandro"> Bill Qubeka</a></p>
+        </section>
+    </footer>
 
     <script src="js/javascript.js"></script>
 </body>
